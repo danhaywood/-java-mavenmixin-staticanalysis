@@ -37,46 +37,48 @@
         </developer>
     </developers>    
     
-    <properties>
-		<danhaywood-mavenmixin-staticanalysis.checkstyle.configLocation>
-			checkstyle.xml
-		</danhaywood-mavenmixin-staticanalysis.checkstyle.configLocation>
-		<danhaywood-mavenmixin-staticanalysis.pmd.ruleset>
-			pmd.xml
-		</danhaywood-mavenmixin-staticanalysis.pmd.ruleset>
-    </properties>
-    
     <profiles>
         <profile>
-            <id>danhaywood-mavenmixin-staticanalysis</id>
+            <id>mavenmixin-staticanalysis</id>
             <activation>
                 <property>
-                    <name>danhaywood-mavenmixin-staticanalysis</name>
+                    <name>mavenmixin-staticanalysis</name>
                 </property>
             </activation>
 
+            <properties>
+                <maven-checkstyle-plugin.version>2.11</maven-checkstyle-plugin.version>
+                <maven-pmd-plugin.version>3.0.1</maven-pmd-plugin.version>
+                <javancss-maven-plugin.version>2.1</javancss-maven-plugin.version>
+                <jdepend-maven-plugin.version>2.0-beta-2</jdepend-maven-plugin.version>
+                <findbugs-maven-plugin.version>2.5</findbugs-maven-plugin.version>
+                
+                <maven-checkstyle-plugin.configLocation>checkstyle.xml</maven-checkstyle-plugin.configLocation>
+                <maven-pmd-plugin.ruleset>pmd.xml</maven-pmd-plugin.ruleset>
+            </properties>
+            
 			<reporting>
 				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-checkstyle-plugin</artifactId>
-						<version>2.11</version>
+						<version>${maven-checkstyle-plugin.version}</version>
 						<configuration>
-							<configLocation>${danhaywood-mavenmixin-staticanalysis.checkstyle.configLocation}</configLocation>
+							<configLocation>${maven-checkstyle-plugin.configLocation}</configLocation>
 						</configuration>
 					</plugin>
 
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-pmd-plugin</artifactId>
-						<version>3.0.1</version>
+						<version>${maven-pmd-plugin.version}</version>
 						<configuration>
 							<sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
 							<minimumTokens>100</minimumTokens>
 							<linkXRef>true</linkXRef>
 							<targetJdk>${compileTarget}</targetJdk>
 							<rulesets>
-								<ruleset>${danhaywood-mavenmixin-staticanalysis.pmd.ruleset}</ruleset>
+								<ruleset>${maven-pmd-plugin.ruleset}</ruleset>
 							</rulesets>
 							<excludeRoots>
 								<excludeRoot>
@@ -92,13 +94,13 @@
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>javancss-maven-plugin</artifactId>
-						<version>2.1</version>
+						<version>${javancss-maven-plugin.version}</version>
 					</plugin>
 
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>jdepend-maven-plugin</artifactId>
-						<version>2.0-beta-2</version>
+						<version>${jdepend-maven-plugin.version}</version>
 					</plugin>
 
 				</plugins>
@@ -116,7 +118,7 @@
 						<plugin>
 							<groupId>org.apache.maven.plugins</groupId>
 							<artifactId>maven-checkstyle-plugin</artifactId>
-							<version>2.11</version>
+							<version>${maven-checkstyle-plugin.version}</version>
 						</plugin>
 
 						<!-- Quality checks: pmd -->
@@ -127,7 +129,7 @@
 						<plugin>
 							<groupId>org.apache.maven.plugins</groupId>
 							<artifactId>maven-pmd-plugin</artifactId>
-							<version>3.0.1</version>
+							<version>${maven-pmd-plugin.version}</version>
 							<configuration>
 								<targetJdk>${compileSource}</targetJdk>
 								<sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
@@ -153,7 +155,7 @@
 						<plugin>
 							<groupId>org.codehaus.mojo</groupId>
 							<artifactId>javancss-maven-plugin</artifactId>
-							<version>2.0</version>
+							<version>${javancss-maven-plugin.version}</version>
 						</plugin>
 
 						<!-- Quality checks: jdepend -->
@@ -161,13 +163,13 @@
 						<plugin>
 							<groupId>org.codehaus.mojo</groupId>
 							<artifactId>jdepend-maven-plugin</artifactId>
-							<version>2.0-beta-2</version>
+							<version>${jdepend-maven-plugin.version}</version>
 						</plugin>
 						
 						<plugin>
 							<groupId>org.codehaus.mojo</groupId>
 							<artifactId>findbugs-maven-plugin</artifactId>
-							<version>2.5</version>
+							<version>${findbugs-maven-plugin.version}</version>
 							<inherited>true</inherited>
 						</plugin>
 						
@@ -210,7 +212,6 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-pmd-plugin</artifactId>
-						<version>3.0.1</version>
 						<executions>
 							<execution>
 								<phase>verify</phase>

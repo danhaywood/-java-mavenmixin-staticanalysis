@@ -16,31 +16,84 @@ This module was initially developed for use within link:http://isis.apache.org[A
 ====
 
 
-== Input properties
-
-The plugin accepts two properties, both required:
-
-[source,xml]
-----
-    <danhaywood-mavenmixin-staticanalysis.checkstyle.configLocation>        <!--1-->
-        ${project.basedir}/../checkstyle.xml
-    </danhaywood-mavenmixin-staticanalysis.checkstyle.configLocation>       
-    <danhaywood-mavenmixin-staticanalysis.pmd.ruleset>                      <!--2-->
-        ${project.basedir}/../pmd.xml
-    </danhaywood-mavenmixin-staticanalysis.pmd.ruleset>
-</properties>
-----
-<1> the location of the link:https://maven.apache.org/plugins/maven-checkstyle-plugin/examples/custom-checker-config.html[checkstyle.xml] file
-<2> the location of the link:https://maven.apache.org/plugins/maven-pmd-plugin/examples/usingRuleSets.html[pmd.xml] ruleset file
-
-These properties should be specified in the consuming module.
 
 
 == How to Configure
 
 To configure:
 
-* add the following to the `pom.xml` of each module: +
+* copy and paste the following into either the `pom.xml` of the consuming module or (better still) the `pom.xml` of the top-level parent of the consuming module: +
++
+[source,xml]
+----
+<properties>
+    ...
+    <mavenmixin-staticanalysis.version>0.0.2</mavenmixin-staticanalysis.version>
+
+    <maven-checkstyle-plugin.version>2.11</maven-checkstyle-plugin.version>
+    <maven-pmd-plugin.version>3.0.1</maven-pmd-plugin.version>
+    <javancss-maven-plugin.version>2.1</javancss-maven-plugin.version>
+    <jdepend-maven-plugin.version>2.0-beta-2</jdepend-maven-plugin.version>
+    <findbugs-maven-plugin.version>2.5</findbugs-maven-plugin.version>
+    ...
+</properties>
+----
++
+and: +
++
+[source,xml]
+----
+<build>
+    <pluginManagement>
+        <plugins>
+            ...
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${maven-checkstyle-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>${maven-pmd-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>javancss-maven-plugin</artifactId>
+                <version>${javancss-maven-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jdepend-maven-plugin</artifactId>
+                <version>${jdepend-maven-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <version>${findbugs-maven-plugin.version}</version>
+            </plugin>
+            ...
+        </plugins>
+    </pluginManagement>
+</build>
+----
+
+
+* update the following property/ies in the `pom.xml` of the consuming module: +
++
+[source,xml]
+----
+<properties>
+    ...
+    <maven-checkstyle-plugin.configLocation>checkstyle.xml</maven-checkstyle-plugin.configLocation>     <!--1-->
+    <maven-pmd-plugin.ruleset>pmd.xml</maven-pmd-plugin.ruleset>                                        <!--2-->
+    ...
+</properties>
+----
+<1> the location of the link:https://maven.apache.org/plugins/maven-checkstyle-plugin/examples/custom-checker-config.html[checkstyle.xml] file
+<2> the location of the link:https://maven.apache.org/plugins/maven-pmd-plugin/examples/usingRuleSets.html[pmd.xml] ruleset file
+
+* add the following to the `pom.xml` of the consuming module: +
 +
 [source,xml]
 ----
@@ -56,7 +109,7 @@ To configure:
                     <mixin>
                         <groupId>com.danhaywood.mavenmixin</groupId>
                         <artifactId>staticanalysis</artifactId>
-                        <version>0.0.1</version>
+                        <version>${mavenmixin-staticanalysis.version}</version>
                     </mixin>
                 </mixins>
             </configuration>
@@ -76,7 +129,7 @@ However, the plugin _does_ allow reports to be generated using the site lifecycl
 
 [source,bash]
 ----
-mvn clean site -Ddanhaywood-mavenmixin-staticanalysis
+mvn clean site -Dmavenmixin-staticanalysis
 ----
 
 This will generate HTML website in the usual `target/site` directory.
@@ -91,6 +144,7 @@ None currently
 
 == Change Log
 
+* `0.0.2` - updates README for properties and plugin management, shortens property names and profile id
 * `0.0.1` - first release
 
 
@@ -144,8 +198,8 @@ For example:
 
 [source]
 ----
-sh release.sh 0.0.1 \
-              0.0.2-SNAPSHOT \
+sh release.sh 0.0.2 \
+              0.0.3-SNAPSHOT \
               dan@haywood-associates.co.uk \
               "this is not really my passphrase"
 ----
@@ -165,7 +219,7 @@ If the script completes successfully, then push changes:
 [source]
 ----
 git push origin master
-git push origin 0.0.1
+git push origin 0.0.2
 ----
 
 If the script fails to complete, then identify the cause, perform a `git reset --hard` to start over and fix the issue before trying again.
